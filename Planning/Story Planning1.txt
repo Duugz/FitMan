@@ -66,11 +66,11 @@ Get application moving between page 1 ---> 2 ---> 3 and back
 
 5. Build createExercise screen with working UI (without database saving) 
 
-5.1 Dropdown Menu with all fields [45 mins]
-5.2 Date time fields [60 mins]
-5.3 Intensity Slider [30 mins]
-5.4 Submit Button (without database saving) calls back to exerciseSummary screen [30 mins]
-5.5 Cancel Button calls back to exerciseSummary screen [30 mins]
+5.1 Dropdown Menu with all fields [45 mins] - 25 mins
+5.2 Date time fields [60 mins] - 20 mins
+5.3 Intensity Slider [30 mins] - 30 mins
+5.4 Submit Button (without database saving) calls back to exerciseSummary screen [30 mins] -10 mins
+5.5 Cancel Button calls back to exerciseSummary screen [30 mins]-10 mins 
 
 6. Build exerciseSummary page with pretend data
 
