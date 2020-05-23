@@ -2,31 +2,55 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
 import pandas as pd
+import sqlite3
 from dash.dependencies import Input, Output
 from datetime import datetime as dt
 
 
-testExercise = {"Date": ["19/02/03", "19/02/03"],
-     "Intensity": ["Hard", "Hard"],
-     "Exercise": ["Soccer", "Soccer"],
-     "Length": ["1 Hour", "2 Hours"]}
 
-df = pd.DataFrame(data=testExercise)
+
+
+
+
+#testExercise = {"Date": ["19/02/03", "19/02/03"],
+     #"Intensity": ["Hard", "Hard"],
+     #"Exercise": ["Soccer", "Soccer"],
+     #"Length": ["1 Hour", "2 Hours"]}
+
+
+
+
+
+def getExercisefromdatabase():
+
+    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db") 
+    df = pd.read_sql_query("SELECT ExerciseDate, ExerciseType, Intensity, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)
+    
+    return df
+
+
+
+
+
 
        
-exerciseSummary_layout = html.Div([
-    html.H1("Exercise Summary"),
-    html.Br(),
-    html.I("Your Exercises"),
-    dash_table.DataTable(
-        id='table',
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict('records'),
-    ),
-    html.Div(id='exerciseSummary-display-value'),
-    html.Br(),
-    dcc.Link('Create New Exercise', href='/createExercise'),
-])
+def getExerciseSummary_layout():
+
+    df = getExercisefromdatabase()
+
+    return html.Div([
+        html.H1("Exercise Summary"),
+        html.Br(),
+        html.I("Your Exercises"),
+        dash_table.DataTable(
+            id='table',
+            columns=[{"name": i, "id": i} for i in df.columns],
+            data=df.to_dict('records'),
+        ),
+        html.Div(id='exerciseSummary-display-value'),
+        html.Br(),
+        dcc.Link('Create New Exercise', href='/createExercise'),
+        ])
 
 createExercise_layout = html.Div([
     html.H1("Create Exercise"),

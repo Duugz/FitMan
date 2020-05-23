@@ -81,11 +81,34 @@ Total for story1: [6.5 hours] Actually Took - 3.5 hours (reworking multipage sys
 
 
 
-Story1.1: Add Exercise to ExerciseSummary for a user (with database)
-- P
+Story1.1: View ExerciseSummary datatable with database data for a user 
+Same as story 1 except
+- Exercise summary only shows database entries
+- User "rob" will be hardcoded (created using SQLbrowser)
+Steps
+1. Bring back real exercises from database to datatable in Exercise Summary 
+- create a connection and bring data [15 mins]-[40 mins] (didn't know SQL and had to use error messages to sort row and get them)
+- convert the format [40 mins] - [30mins]
+Worked out this in SQLbrowser:
+SELECT "ExerciseDate", "ExerciseType","Intensity","LengthMins" FROM Exercises WHERE "UserID" = "5" ORDER by ExerciseDate DESC
+Original = 55mins
+Actual = 1.25 hours
+This was due to having to define layouts as functions to make sure that it would recall the database each time the page was displayed
+Also I changed the way i call the database to use panda to get a dataframe which worked better with dash datatables
 
-
-
+Story1.2: Save new exercise to database and see new data in table 
+Same as story 1 except
+- New exercises are saved to databases using "Submit" button
+- Exercise summary only shows database entries
+- User "rob" will be hardcoded (created using SQLbrowser)
+Steps
+1. Submit button calls SQL insert statement 
+- Create callback with the Submit button - 5 mins
+- Gather all field data [not sure how to/45 mins]**** 
+- Update database [30 mins]
+INSERT INTO "main"."Exercises"
+("ExerciseID", "UserID", "ExerciseDate", "ExerciseType", "Intensity", "LengthMins")
+VALUES (1, 5, '05/02/2020', 'Run', 4, 15);
 
 
 

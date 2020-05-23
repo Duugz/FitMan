@@ -4,7 +4,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from datetime import datetime as dt
 from fitman import fitman
-from layouts import exerciseSummary_layout, createExercise_layout, start_layout
+from layouts import getExerciseSummary_layout, createExercise_layout, start_layout
 
 fitman.layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -21,7 +21,7 @@ def display_page(pathname):
     elif pathname == '/createExercise':
         return createExercise_layout
     elif pathname == '/exerciseSummary':
-        return exerciseSummary_layout
+        return getExerciseSummary_layout()
     else:
         return '404'
 
