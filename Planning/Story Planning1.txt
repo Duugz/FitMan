@@ -54,13 +54,15 @@ Story1: Add Exercise to ExerciseSummary for a user (with no database)
 Steps for rob
 1. Create a fresh project 'FitMan' [10 mins] - 2mins
 2. Create Github account and add a project [1 hour] -10 mins
-3. create database and move it into FitMan/database/fitman.sqbpro folder [10 mins] - 
+3. create database and move it into FitMan/database/fitman.sqbpro folder [10 mins] - 1 min
 4. Create 3 python scripts index.py, exerciseSummary.py, createExercise.py,__init__.py 
 Get application moving between page 1 ---> 2 ---> 3 and back
 
-4.1 Index/__init__.py/__pycache__ [20 mins] 
-4.2 exerciseSummary [20 mins]
-4.3 createExercise [20 mins]
+4.1 Index/ [20 mins] - 10 mins
+4.2 exerciseSummary [20 mins] - 30 mins 
+4.3 createExercise [20 mins] - 30 mins
+
+---> REWORKED MULTIPAGE SYSTEM (took 15 mins)
 
 5. Build createExercise screen with working UI (without database saving) 
 
