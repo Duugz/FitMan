@@ -74,10 +74,10 @@ Get application moving between page 1 ---> 2 ---> 3 and back
 
 6. Build exerciseSummary page with pretend data
 
-6.1 Investigate Datatables within Dash [1 hour]
-6.2 Build data table using pretend data [30 mins]
+6.1 Investigate Datatables within Dash [1 hour] - 10 mins
+6.2 Build data table using pretend data [30 mins] - 15 mins
 
-Total for story1: [6.5 hours] 
+Total for story1: [6.5 hours] Actually Took - 3.5 hours (reworking multipage system took longer than expected everything else was shorter)
 
 
 

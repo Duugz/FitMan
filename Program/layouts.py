@@ -1,10 +1,28 @@
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_table
+import pandas as pd
 from dash.dependencies import Input, Output
 from datetime import datetime as dt
 
+
+testExercise = {"Date": ["19/02/03", "19/02/03"],
+     "Intensity": ["Hard", "Hard"],
+     "Exercise": ["Soccer", "Soccer"],
+     "Length": ["1 Hour", "2 Hours"]}
+
+df = pd.DataFrame(data=testExercise)
+
+       
 exerciseSummary_layout = html.Div([
-    
+    html.H1("Exercise Summary"),
+    html.Br(),
+    html.I("Your Exercises"),
+    dash_table.DataTable(
+        id='table',
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict('records'),
+    ),
     html.Div(id='exerciseSummary-display-value'),
     html.Br(),
     dcc.Link('Create New Exercise', href='/createExercise'),
