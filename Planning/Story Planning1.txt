@@ -1,0 +1,158 @@
+Tech to figure out:
+1. Basic Html buttons, inputs etc
+2. Multipage dash apps
+3. SQL Database
+4. Bar Chart/Graph
+ 
+
+Software Pages: 
+
+Startup
+Login - username password - grab from database  
+Create - username password - inputs then add to database 
+
+Menu 
+- Logout
+- Access Week ----> 'Complete Workout' Screen 
+- edit scheduling --- goto schedule screen 
+- graphing screen 
+
+Select sports and activities - finish or back (buttons) 
+
+Graphing Screen 
+(DOT GRAPH)
+Click to see date and activity on dot 
+
+Back 
+
+ 
+
+Stories--------------------------------
+
+
+
+Story1: Add Exercise to ExerciseSummary for a user (with no database)
+- Start application in Index page
+- User clicks link to 'View my exercise'
+- Application shows exercise summary page
+- Table showing all exercises for said User
+- This includes Type, Length, Intensity
+- Sorted by date with the most recent at the top
+- Shows all rows no matter how many (1 or 1000)
+- User clicks 'add new exercise link/button' 
+- The application shows a new exercise page 
+- This 'new exercise' page has a cancel and submit button
+- The date/time defaults to the current (may have date/time picker)
+- To select exercise type, it will be in a drop down (to be defined)
+- Exercise Types: Run, Swim, Socccer, Tennis, Basketball, Paddle, Boxing, Other
+- Intensities: 1-10 slider
+- User clicks button/link 'SaveExercise'
+- Application creates new exercise in database table
+- Popup 'exercise saved well done' 
+- User is taken back to 'View my exercise' Screen
+- Application displays new exercise on said page at the top (newest)
+Steps for rob
+1. Create a fresh project 'FitMan' [10 mins] - 2mins
+2. Create Github account and add a project [1 hour] -10 mins
+3. create database and move it into FitMan/database/fitman.sqbpro folder [10 mins] - 
+4. Create 3 python scripts index.py, exerciseSummary.py, createExercise.py,__init__.py 
+Get application moving between page 1 ---> 2 ---> 3 and back
+
+4.1 Index/__init__.py/__pycache__ [20 mins] 
+4.2 exerciseSummary [20 mins]
+4.3 createExercise [20 mins]
+
+5. Build createExercise screen with working UI (without database saving) 
+
+5.1 Dropdown Menu with all fields [45 mins]
+5.2 Date time fields [60 mins]
+5.3 Intensity Slider [30 mins]
+5.4 Submit Button (without database saving) calls back to exerciseSummary screen [30 mins]
+5.5 Cancel Button calls back to exerciseSummary screen [30 mins]
+
+6. Build exerciseSummary page with pretend data
+
+6.1 Investigate Datatables within Dash [1 hour]
+6.2 Build data table using pretend data [30 mins]
+
+Total for story1: [6.5 hours] 
+
+
+
+Story1.1: Add Exercise to ExerciseSummary for a user (with database)
+- P
+
+
+
+
+
+
+
+
+
+Story2:
+- User opens Graph of all exercises/time
+	- Bar for each week of exercise 
+Story3:
+- Show motivational message on the exerciseSummary page if the user has no exercises 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUCK YOU - say when due to dad 
