@@ -20,7 +20,16 @@ def getExercisefromdatabase():
     
     return df
 
+def addExerciseToDatabase():
+
+    #connector = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
+    #dataframe = pd.read_sql_query(INSERT INTO Exercises (ExerciseID, ExerciseDate, ExerciseType, Intensity, LengthMins)
+                                  #VALUES ()
+    print('test')
+    return 
       
+
+
 def getExerciseSummary_layout():
 
     df = getExercisefromdatabase()#df stands for dataframe, that passes into the function
@@ -36,35 +45,17 @@ def getExerciseSummary_layout():
         ),
         html.Div(id='exerciseSummary-display-value'),
         html.Br(),
-        dcc.Link('Create New Exercise', href='/createExercise'),
+        html.A(
+            html.Button('Create New Exercise'),
+            href='/createExercise',)
         ])
-
-
-
-
-
-
-
-
-#def getExercisedetails():
-
-
-    
-
-#def addExercisedatabase():
-
-    #connector = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
-    #dataframe = pd.read_sql_query(INSERT INTO Exercises (ExerciseID, ExerciseDate, ExerciseType, Intensity, LengthMins)
-                                  #VALUES ()
-    #return "Success"
-
-    
+  
 createExercise_layout = html.Div([
     html.H1("Create Exercise"),
     html.Br(),
     html.I("Select Exercise"),
     dcc.Dropdown(
-        id='createExercise-dropdown',
+        id='createExercise-exercise',
         options=[
             {'label': 'Swim', 'value': 'Swim'},
             {'label': 'Run', 'value': 'Run'},
@@ -76,6 +67,7 @@ createExercise_layout = html.Div([
         ],
         value='Swim'
     ),
+    
     html.Br(),
     html.I("Select the Date"),
     html.Br(),
@@ -84,22 +76,21 @@ createExercise_layout = html.Div([
         min_date_allowed=dt(2020, 5, 23),
         max_date_allowed=dt(2024, 9, 19),
         initial_visible_month=dt(2020, 8, 5),
-        date=str(dt(2020, 8, 25, 23, 59, 59))
-    ),
+        date=str(dt(2020, 8, 25)),
+        ),
+
     html.Br(),
     html.I("How long?"),
     dcc.Slider(
-    id='createExercise_length_slider',
-    min=0,
-    max=240,
-    step=None,
-    marks={
-        0: '0 M',
+        id='createExercise-length-slider',
+        min=0,
+        max=240,
+        step=None,
+        marks={
         5: '5 M',
         10: '10 M',
         15: '15 M',
         20: '20 M',
-        25: '25 M',
         30: '30 M',
         45: '45 M',
         60: '60 M',
@@ -110,16 +101,17 @@ createExercise_layout = html.Div([
         210: '3.5 Hours',
         240: '4 Hours',
         },
-    value=5
+    value=60
     ),
+    
     html.Br(),
     html.I("What intensity?"),
     dcc.Slider(
-    id='createExercise_intensity_slider',
-    min=0,
-    max=10,
-    step=None,
-    marks={
+        id='createExercise-intensity-slider',
+        min=0,
+        max=10,
+        step=None,
+        marks={
         0: 'Easy',
         1: '1 '     ,
         2: '2 ',
@@ -134,20 +126,35 @@ createExercise_layout = html.Div([
         },
     value=5
     ),
-    html.Div(id='createExercise-display-value'),
+    html.Br(),
+    #html.A(
+    
+    html.Button(id='submit-btn', n_clicks=0, children='Submit'),
+
+    #id='btn-save-new-exercise'),
+        #href='/exerciseSummary'
+          
+    #),
+    #html.div(id="debug-message-insert"),
+    html.Div(id='form-end'),
+    
     html.Br(),
     html.A(
-        html.Button('Submit'),
-        href='/exerciseSummary'
-    ),
-    html.Br(),
-    html.A(
-        html.Button('Cancel'),
+        html.Button('Back'),
         href='/exerciseSummary',
     ),
 ])
 
 start_layout = html.Div([
+    #html.H4("username"),
+    #dcc.Input(id="username", placeholder="enter username", type="text"),
+    #html.H4("password"),
+    #dcc.Input(id="password", placeholder="enter password", type="password"),
+    #html.Button("add user", id="add-button"),
+    #html.Hr(),
+    #html.H3("users"),
+    #html.Div(id="users"),
+
     html.Div(id ='start-display-value'),
     html.Br(),
     dcc.Link('Go to Exercise Summary', href='/exerciseSummary'),   
