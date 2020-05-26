@@ -7,18 +7,10 @@ from dash.dependencies import Input, Output
 from datetime import datetime as dt
 
 
-
-
-
-
-
 #testExercise = {"Date": ["19/02/03", "19/02/03"],
      #"Intensity": ["Hard", "Hard"],
      #"Exercise": ["Soccer", "Soccer"],
      #"Length": ["1 Hour", "2 Hours"]}
-
-
-
 
 
 def getExercisefromdatabase():
@@ -28,15 +20,10 @@ def getExercisefromdatabase():
     
     return df
 
-
-
-
-
-
-       
+      
 def getExerciseSummary_layout():
 
-    df = getExercisefromdatabase()
+    df = getExercisefromdatabase()#df stands for dataframe, that passes into the function
 
     return html.Div([
         html.H1("Exercise Summary"),
@@ -52,6 +39,26 @@ def getExerciseSummary_layout():
         dcc.Link('Create New Exercise', href='/createExercise'),
         ])
 
+
+
+
+
+
+
+
+#def getExercisedetails():
+
+
+    
+
+#def addExercisedatabase():
+
+    #connector = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
+    #dataframe = pd.read_sql_query(INSERT INTO Exercises (ExerciseID, ExerciseDate, ExerciseType, Intensity, LengthMins)
+                                  #VALUES ()
+    #return "Success"
+
+    
 createExercise_layout = html.Div([
     html.H1("Create Exercise"),
     html.Br(),

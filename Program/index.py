@@ -5,6 +5,7 @@ from dash.dependencies import Input, Output
 from datetime import datetime as dt
 from fitman import fitman
 from layouts import getExerciseSummary_layout, createExercise_layout, start_layout
+import callbacks
 
 fitman.layout = html.Div([
     dcc.Location(id='url', refresh=False),
