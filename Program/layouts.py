@@ -73,7 +73,7 @@ createExercise_layout = html.Div([
     html.Br(),
     dcc.DatePickerSingle(
         id='createExercise-date-picker',
-        min_date_allowed=dt(2020, 5, 23),
+        min_date_allowed=dt(2018, 5, 23),
         max_date_allowed=dt(2024, 9, 19),
         initial_visible_month=dt(2020, 8, 5),
         date=str(dt(2020, 8, 25)),

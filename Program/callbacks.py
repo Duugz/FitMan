@@ -4,7 +4,6 @@ import dash_core_components as dcc
 import re
 import sqlite3
 from dash.dependencies import Input, Output, State
-from datetime import datetime 
 from fitman import fitman
 from datetime import datetime as dt
 
@@ -22,16 +21,19 @@ from datetime import datetime as dt
     ])
     
 
-def addExerciseToDatabase(n_clicks, exerciseValue, dateValue, lengthValue, intensityValue):
+def addExerciseToDatabase(n_clicks, exerciseValue, dateStr, lengthValue, intensityValue):
 
     if n_clicks > 0:
 
         connectionAdd = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
-    
-
         cursor = connectionAdd.cursor()
+
+        #not really sure why this works, but sometimes the date would appear with time. This stopped that.
+
+        date = dt.strptime(re.split('T| ', dateStr)[0], '%Y-%m-%d')
+
         insertSQL = 'INSERT INTO Exercises (UserID, ExerciseType, ExerciseDate, LengthMins, Intensity) VALUES (5,"{}","{}",{},{})'
-        insertSQL = insertSQL.format(exerciseValue, dateValue, lengthValue, intensityValue)
+        insertSQL = insertSQL.format(exerciseValue, date.strftime('%Y-%m-%d'), lengthValue, intensityValue)
         countAdd = cursor.execute(insertSQL)
         connectionAdd.commit()
 
@@ -40,7 +42,7 @@ def addExerciseToDatabase(n_clicks, exerciseValue, dateValue, lengthValue, inten
         connectionAdd.close()
     
     
-        return 'You have submitted "{}" on the "{}" for "{}" minutes at "{}" intensity'.format(exerciseValue, dateValue, lengthValue, intensityValue)
+        return 'You have submitted "{}" on the "{}" for "{}" minutes at "{}" intensity'.format(exerciseValue, dateStr, lengthValue, intensityValue)
     else:
         return  
 
