@@ -103,23 +103,40 @@ Same as story 1 except
 - User "rob" will be hardcoded (created using SQLbrowser)
 Steps
 1. Submit button calls SQL insert statement 
-- Create callback with the Submit button - 5 mins
-- Gather all field data [not sure how to/45 mins]**** 
-- Update database [30 mins]
+- Create callback with the Submit button - 5 mins [3 mins]
+- Gather all field data [not sure how to/45 mins] [2 hours]
+- Update database [30 mins] [3 hours]
 INSERT INTO "main"."Exercises"
 ("ExerciseID", "UserID", "ExerciseDate", "ExerciseType", "Intensity", "LengthMins")
 VALUES (1, 5, '05/02/2020', 'Run', 4, 15);
+Because of the unknown factor with gathering field data, this story took me alot longer than originally planned 
+Cleaned up callbacks script as well which took up about 45 mins
+------Completed story 1-------------
 
 
 
+Story2: User opens Graph of one month of exercises/time (Bar graph)
+- User starts on Exercise Summary page and presses view graph button 
+- User views bar for each day of exercise
+- The x-axis will show dates (if dash can do it) or it can be just numbers 0-30
+- The y-axis is a total number of minutes exercise (exerciseLength)
+- No bar will appear with no exercise
+- 1 exercise in the day will show the time in minutes of the singular exercises
+- more than 1 exercise will show the time of multiple exercises added together
+- If there are no exercises then it will show no graphs and a message saying "No exercises found!"
+- The user can then click the "back" button to go back to the Exercise Summary page
+Steps
+1. Add a new page to layouts exerciseSummaryGraph [10 mins]
+2. Define the page layout as a function (so that we can show an error message) using the dcc.Graph [30 mins] 
+3. Copy exerciseSummary, using the 'query data' that will specifcally get the dates and time in minutes from the database [40 mins] 
+4. Add the back button to the layout [3 mins]
+Testing the graph:
+1. If a user has no exercises for a month
+2. One exercise is added to the datatable
+3. Multiple exercises within a day (adding)
+ 
 
 
-
-Story2:
-- User opens Graph of all exercises/time
-	- Bar for each week of exercise 
-Story3:
-- Show motivational message on the exerciseSummary page if the user has no exercises 
 
 
 

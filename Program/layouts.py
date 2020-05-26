@@ -20,13 +20,13 @@ def getExercisefromdatabase():
     
     return df
 
-def addExerciseToDatabase():
+#def addExerciseToDatabase():
 
     #connector = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
     #dataframe = pd.read_sql_query(INSERT INTO Exercises (ExerciseID, ExerciseDate, ExerciseType, Intensity, LengthMins)
                                   #VALUES ()
-    print('test')
-    return 
+    #print('test')
+    #return 
       
 
 
@@ -48,6 +48,11 @@ def getExerciseSummary_layout():
         html.A(
             html.Button('Create New Exercise'),
             href='/createExercise',)
+        html.Br(),
+        html.A(
+            html.Button('View Exercise Summary for this week'),
+            href='/graph',)
+        ])
         ])
   
 createExercise_layout = html.Div([
@@ -127,15 +132,8 @@ createExercise_layout = html.Div([
     value=5
     ),
     html.Br(),
-    #html.A(
-    
     html.Button(id='submit-btn', n_clicks=0, children='Submit'),
-
-    #id='btn-save-new-exercise'),
-        #href='/exerciseSummary'
-          
-    #),
-    #html.div(id="debug-message-insert"),
+    
     html.Div(id='form-end'),
     
     html.Br(),
@@ -159,3 +157,37 @@ start_layout = html.Div([
     html.Br(),
     dcc.Link('Go to Exercise Summary', href='/exerciseSummary'),   
 ])
+
+
+
+def exerciseSummaryGraph_layout():
+    
+
+    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db") 
+    df = pd.read_sql_query("SELECT ExerciseDate, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)
+
+
+    return
+    dcc.Graph(
+        id='exerciseSummaryGraph',
+        figure={
+            'data': [
+                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'test'},
+            ],
+            'layout': {
+                'title': 'This Months Summary'
+            }
+        }
+    )
+
+    html.Br(),
+    html.A(
+        html.Button('Back'),
+        href='/exerciseSummary',
+    ),
+
+
+
+
+
+
