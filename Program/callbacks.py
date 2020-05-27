@@ -44,7 +44,9 @@ def addExerciseToDatabase(n_clicks, exerciseValue, dateStr, lengthValue, intensi
     
         return 'You have submitted "{}" on the "{}" for "{}" minutes at "{}" intensity'.format(exerciseValue, dateStr, lengthValue, intensityValue)
     else:
-        return  
+        return
+#@fitman.callback(
+
 
      
 

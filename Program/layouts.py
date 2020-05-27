@@ -5,6 +5,7 @@ import pandas as pd
 import sqlite3
 from dash.dependencies import Input, Output
 from datetime import datetime as dt
+import plotly.graph_objs as go
 
 
 #testExercise = {"Date": ["19/02/03", "19/02/03"],
@@ -47,12 +48,13 @@ def getExerciseSummary_layout():
         html.Br(),
         html.A(
             html.Button('Create New Exercise'),
-            href='/createExercise',)
+            href='/createExercise',),
+        
+        html.Br(),
         html.Br(),
         html.A(
             html.Button('View Exercise Summary for this week'),
             href='/graph',)
-        ])
         ])
   
 createExercise_layout = html.Div([
@@ -160,31 +162,36 @@ start_layout = html.Div([
 
 
 
-def exerciseSummaryGraph_layout():
-    
+
+def getDatesandLengthsfromdatabase():
 
     conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db") 
-    df = pd.read_sql_query("SELECT ExerciseDate, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)
+    dataframe = pd.read_sql_query("SELECT LengthMins, ExerciseDate, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)
 
+    data=dataframe.to_dict('dict')
+        
+    return data
+    
+    
+def exerciseSummaryGraph_layout():
 
-    return
-    dcc.Graph(
-        id='exerciseSummaryGraph',
-        figure={
-            'data': [
-                {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'test'},
-            ],
-            'layout': {
-                'title': 'This Months Summary'
-            }
-        }
-    )
+    graph_data = getDatesandLengthsfromdatabase(),
+    
+    fig=go.Figure(data=[go.Bar(graph_data, x='LengthMins', y='ExerciseDate')])
+    
+    return html.Div([
+        dcc.Graph(
+            id='exerciseSummaryGraph',
+            figure=fig
+            
+        ),
+                
+        html.Br(),
+        html.A(
+            html.Button('Back'),
+            href='/exerciseSummary'),
+    ])
 
-    html.Br(),
-    html.A(
-        html.Button('Back'),
-        href='/exerciseSummary',
-    ),
 
 
 

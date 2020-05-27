@@ -126,10 +126,10 @@ Story2: User opens Graph of one month of exercises/time (Bar graph)
 - If there are no exercises then it will show no graphs and a message saying "No exercises found!"
 - The user can then click the "back" button to go back to the Exercise Summary page
 Steps
-1. Add a new page to layouts exerciseSummaryGraph [10 mins]
-2. Define the page layout as a function (so that we can show an error message) using the dcc.Graph [30 mins] 
-3. Copy exerciseSummary, using the 'query data' that will specifcally get the dates and time in minutes from the database [40 mins] 
-4. Add the back button to the layout [3 mins]
+1. Add a new page to layouts exerciseSummaryGraph [10 mins] -5 mins
+2. Define the page layout as a function (so that we can show an error message) using the dcc.Graph [30 mins] - 20mins
+3. Copy exerciseSummary, using the 'query data' that will specifcally get the dates and time in minutes from the database [40 mins] - 
+4. Add the back button to the layout [3 mins] - 2mins
 Testing the graph:
 1. If a user has no exercises for a month
 2. One exercise is added to the datatable

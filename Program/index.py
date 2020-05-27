@@ -22,7 +22,7 @@ def display_page(pathname):
         return createExercise_layout
     elif pathname == '/exerciseSummary':
         return getExerciseSummary_layout()
-    elif pathname == '/graph:
+    elif pathname == '/graph':
         return exerciseSummaryGraph_layout()
     else:
         return 'Unknown URL'
