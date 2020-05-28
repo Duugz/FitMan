@@ -1,17 +1,21 @@
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-import pandas as pd
 import sqlite3
-from dash.dependencies import Input, Output
-from datetime import datetime as dt
+import pandas as pd
 import plotly.graph_objs as go
+from dash.dependencies import Input, Output
+from datetime import datetime as dt #just convinient to use a shorter name
+from datetime import timedelta
+
+
 
 
 #testExercise = {"Date": ["19/02/03", "19/02/03"],
      #"Intensity": ["Hard", "Hard"],
      #"Exercise": ["Soccer", "Soccer"],
      #"Length": ["1 Hour", "2 Hours"]}
+#^^Used as a makeshift datatable before figuring out how to do query
 
 
 def getExercisefromdatabase():
@@ -33,7 +37,7 @@ def getExercisefromdatabase():
 
 def getExerciseSummary_layout():
 
-    df = getExercisefromdatabase()#df stands for dataframe, that passes into the function
+    df = getExercisefromdatabase()#df stands for dataframe, that passes back from the function
 
     return html.Div([
         html.H1("Exercise Summary"),
@@ -166,31 +170,66 @@ start_layout = html.Div([
 def getDatesandLengthsfromdatabase():
 
     conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db") 
-    dataframe = pd.read_sql_query("SELECT LengthMins, ExerciseDate, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)
-
-    data=dataframe.to_dict('dict')
-        
-    return data
+    df = pd.read_sql_query("SELECT ExerciseDate, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)      
+    return df
     
     
 def exerciseSummaryGraph_layout():
 
-    graph_data = getDatesandLengthsfromdatabase(),
+    df = getDatesandLengthsfromdatabase()
+    databaseDict = df.to_dict('records')
+
+    #create a dictionary with an entry for every date that =0
+    graphDict = dict()
+
+    startDate = dt.strptime("2020-08-01", "%Y-%m-%d")  
+    endDate = dt.strptime("2020-11-01", "%Y-%m-%d")  
+
+    dayCount = (endDate - startDate).days + 1
+    for singleDate in (startDate + timedelta(n) for n in range(dayCount)):
+        graphDict[singleDate]=0    
     
-    fig=go.Figure(data=[go.Bar(graph_data, x='LengthMins', y='ExerciseDate')])
     
+    #for every date in the database, add the length to the value in the dictionary
+    for exer in databaseDict:
+
+        eDate= dt.strptime(exer.get("ExerciseDate"), "%Y-%m-%d")    
+        lengthMins = int(exer.get("LengthMins"))
+
+        dayLengthMins = graphDict.get(eDate)
+        graphDict[eDate]= dayLengthMins + lengthMins
+
+
+    #build an aray of x and v values for the graph
+    eDateArr = []
+    eLengthArr = []
+
+    for singleDate in (startDate + timedelta(n) for n in range(dayCount)):
+
+        dayLengthMins = graphDict[singleDate]
+        eDateArr = eDateArr + [singleDate]
+        eLengthArr = eLengthArr + [dayLengthMins]
+
+    fig=go.Figure(
+        data=[go.Bar(
+                      x=eDateArr,
+                      y=eLengthArr)
+               ])
+        #The graphshows down the bottom, dates from the first workout to the last recorded and calculates dates inbetween. Unforutnetly I could not find a way to control this properly
+
     return html.Div([
-        dcc.Graph(
+            dcc.Graph(
             id='exerciseSummaryGraph',
             figure=fig
-            
+                 
         ),
-                
+
         html.Br(),
         html.A(
             html.Button('Back'),
             href='/exerciseSummary'),
     ])
+
 
 
 

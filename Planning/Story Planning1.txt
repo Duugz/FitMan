@@ -128,12 +128,20 @@ Story2: User opens Graph of one month of exercises/time (Bar graph)
 Steps
 1. Add a new page to layouts exerciseSummaryGraph [10 mins] -5 mins
 2. Define the page layout as a function (so that we can show an error message) using the dcc.Graph [30 mins] - 20mins
-3. Copy exerciseSummary, using the 'query data' that will specifcally get the dates and time in minutes from the database [40 mins] - 
+3. Copy exerciseSummary, using the 'query data' that will specifcally get the dates and time in minutes from the database [40 mins] - 2.5 hours
 4. Add the back button to the layout [3 mins] - 2mins
+Overall Estimate time - 73 mins~
+Overall for Story2 - 143 mins~
+
 Testing the graph:
 1. If a user has no exercises for a month
 2. One exercise is added to the datatable
 3. Multiple exercises within a day (adding)
+
+
+
+Story3: A user logs into FitMan and can create an account in FitMan
+- A user logs into FitMan
  
 
 
