@@ -4,9 +4,114 @@ import dash_table
 import sqlite3
 import pandas as pd
 import plotly.graph_objs as go
+import constants
+from flask import render_template, request, session, redirect, url_for
 from dash.dependencies import Input, Output
 from datetime import datetime as dt #just convinient to use a shorter name
 from datetime import timedelta
+from fitman import fitman
+
+def getLoggedInPageHeader():
+
+    return html.Div([
+        html.H1("FitMan"),
+        html.H3("User: " + getLoggedInUsername()),
+        html.Hr()
+        ])
+
+
+def getLoggedInUsername():
+    try: 
+        return session[constants.SESSION_USERNAME_FIELD]
+    except:
+        return ""
+
+def isUserLoggedIn():
+    if getLoggedInUsername() == "":
+        return False
+    else:
+        return True
+    
+
+
+def createHomepage_layout():
+
+    if isUserLoggedIn(): 
+    
+        return html.Div([
+        getLoggedInPageHeader(),
+
+        html.H1("Welcome Back!"),
+        
+        html.Div(),
+        html.A(
+            html.Button('See Exercise Summary'),
+            href='/exerciseSummary'),
+        html.Br(),
+        html.A(
+            html.Button('See Exercise Graph'),
+            href='/graph'),
+        html.Br(),
+        html.A(
+            html.Button('Create New Exercise'),
+            href='/createExercise'),
+        html.Br(),
+        html.Br(),
+        html.A(
+            html.Button('Logout', id='logout-button', n_clicks=0),
+            href='/'),
+        html.Div(id="logout-output"),
+        ])
+    
+    else:
+        return html.Div([
+        html.H1("Welcome to FitMan!"),
+        html.Div(),
+        html.Br(),
+        html.I("Enter Username and Password"),
+        html.Br(),
+        dcc.Input(id="username", type="text", placeholder="", debounce=True),
+        dcc.Input(id="password", type="text", placeholder="", debounce=True),
+        html.Div(id="login-output"),
+        html.Br(),
+        html.Br(),
+        html.Button('Login', id='login-button', n_clicks=0),
+        html.A(
+            html.Button('Home'),
+            href='/',),
+        html.Br(),
+        html.Br(),
+        html.A(
+            html.Button('Create Account'),
+            href='/createAccount')
+        ])
+        
+        
+        
+        
+        
+        
+def createAccount_layout():
+    
+    return html.Div([
+
+    html.H1("Create New Account"),
+    html.Div(id ='createAccount-menu'),
+    html.I("Enter New Username and Password"),
+    html.Br(),
+    dcc.Input(id="newUser", type="text", placeholder="", debounce=True),
+    dcc.Input(id="newPass", type="text", placeholder="", debounce=True),
+    html.Div(id="createUser-output"),
+    html.Br(),
+    html.Button('Submit', id='submitUser-btn', n_clicks=0),
+    html.Br(),
+    html.Br(),
+    html.A(
+        html.Button('Back'),
+        href='/',),
+    ])
+
+
 
 
 
@@ -18,10 +123,10 @@ from datetime import timedelta
 #^^Used as a makeshift datatable before figuring out how to do query
 
 
-def getExercisefromdatabase():
+def getExercisefromdatabase(userID):
 
-    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db") 
-    df = pd.read_sql_query("SELECT ExerciseDate, ExerciseType, Intensity, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)
+    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
+    df = pd.read_sql_query("SELECT ExerciseDate, ExerciseType, Intensity, LengthMins FROM Exercises WHERE UserID = " + str(userID) + " ORDER by ExerciseDate DESC", conn)
     
     return df
 
@@ -35,11 +140,13 @@ def getExercisefromdatabase():
       
 
 
-def getExerciseSummary_layout():
+def createExerciseSummary_layout():
 
-    df = getExercisefromdatabase()#df stands for dataframe, that passes back from the function
+    df = getExercisefromdatabase(session[constants.SESSION_USERID_FIELD])#df stands for dataframe, that passes back from the function
 
     return html.Div([
+        getLoggedInPageHeader(),
+        html.Br(),
         html.H1("Exercise Summary"),
         html.Br(),
         html.I("Your Exercises"),
@@ -57,11 +164,25 @@ def getExerciseSummary_layout():
         html.Br(),
         html.Br(),
         html.A(
-            html.Button('View Exercise Summary for this week'),
-            href='/graph',)
+            html.Button('View Progress Graph'),
+            href='/graph',),
+        
+        html.Br(),
+        html.Br(),
+        html.Br(),
+        html.Br(),
+
+        html.A(
+        html.Button('Back'),
+        href='/',),
+        
         ])
   
-createExercise_layout = html.Div([
+def createExercise_layout():
+
+    return html.Div([
+    getLoggedInPageHeader(),
+    html.Br(),
     html.H1("Create Exercise"),
     html.Br(),
     html.I("Select Exercise"),
@@ -149,34 +270,18 @@ createExercise_layout = html.Div([
     ),
 ])
 
-start_layout = html.Div([
-    #html.H4("username"),
-    #dcc.Input(id="username", placeholder="enter username", type="text"),
-    #html.H4("password"),
-    #dcc.Input(id="password", placeholder="enter password", type="password"),
-    #html.Button("add user", id="add-button"),
-    #html.Hr(),
-    #html.H3("users"),
-    #html.Div(id="users"),
-
-    html.Div(id ='start-display-value'),
-    html.Br(),
-    dcc.Link('Go to Exercise Summary', href='/exerciseSummary'),   
-])
 
 
-
-
-def getDatesandLengthsfromdatabase():
+def getDatesandLengthsfromdatabase(userID):
 
     conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db") 
-    df = pd.read_sql_query("SELECT ExerciseDate, LengthMins FROM Exercises WHERE UserID = 5 ORDER by ExerciseDate DESC", conn)      
+    df = pd.read_sql_query("SELECT ExerciseDate, LengthMins FROM Exercises WHERE UserID = " + str(userID) + " ORDER by ExerciseDate DESC", conn)      
     return df
     
     
-def exerciseSummaryGraph_layout():
+def createExerciseSummaryGraph_layout():
 
-    df = getDatesandLengthsfromdatabase()
+    df = getDatesandLengthsfromdatabase(session[constants.SESSION_USERID_FIELD])
     databaseDict = df.to_dict('records')
 
     #create a dictionary with an entry for every date that =0
@@ -217,13 +322,13 @@ def exerciseSummaryGraph_layout():
                ])
         #The graphshows down the bottom, dates from the first workout to the last recorded and calculates dates inbetween. Unforutnetly I could not find a way to control this properly
 
-    return html.Div([
-            dcc.Graph(
+    return  html.Div([
+        getLoggedInPageHeader(),
+        html.Br(),
+        dcc.Graph(
             id='exerciseSummaryGraph',
-            figure=fig
-                 
+            figure=fig     
         ),
-
         html.Br(),
         html.A(
             html.Button('Back'),

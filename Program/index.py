@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 from fitman import fitman
-from layouts import getExerciseSummary_layout, createExercise_layout, start_layout, exerciseSummaryGraph_layout
+from layouts import createExerciseSummary_layout, createExercise_layout, createExerciseSummaryGraph_layout, createHomepage_layout, createAccount_layout
 import callbacks
 
 fitman.layout = html.Div([
@@ -15,15 +15,17 @@ fitman.layout = html.Div([
 #Index Page callback
 @fitman.callback(Output('index', 'children'),
               [Input('url', 'pathname')])
-def display_page(pathname):
+def fitmanPaths(pathname):
     if pathname == '/':
-        return start_layout
+        return createHomepage_layout()
+    elif pathname == '/createAccount':
+        return createAccount_layout()
     elif pathname == '/createExercise':
-        return createExercise_layout
+        return createExercise_layout()
     elif pathname == '/exerciseSummary':
-        return getExerciseSummary_layout()
+        return createExerciseSummary_layout()
     elif pathname == '/graph':
-        return exerciseSummaryGraph_layout()
+        return createExerciseSummaryGraph_layout()
     else:
         return 'Unknown URL'
 
