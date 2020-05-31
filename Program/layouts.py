@@ -5,7 +5,7 @@ import sqlite3
 import pandas as pd
 import plotly.graph_objs as go
 import constants
-from flask import render_template, request, session, redirect, url_for
+from flask import session 
 from dash.dependencies import Input, Output
 from datetime import datetime as dt #just convinient to use a shorter name
 from datetime import timedelta
@@ -27,14 +27,20 @@ def getLoggedInUsername():
         return ""
 
 def isUserLoggedIn():
-    if getLoggedInUsername() == "":
-        return False
-    else:
-        return True
+
+    isLoggedIn = False
     
+    if getLoggedInUsername() == "":
+        isLoggedIn = False
+    else:
+        isLoggedIn = True
+
+    return isLoggedIn
 
 
 def createHomepage_layout():
+
+    #testGetExerciseForRob()
 
     if isUserLoggedIn(): 
     
@@ -68,22 +74,25 @@ def createHomepage_layout():
         html.H1("Welcome to FitMan!"),
         html.Div(),
         html.Br(),
-        html.I("Enter Username and Password"),
-        html.Br(),
+        html.I("Enter Username: "),
         dcc.Input(id="username", type="text", placeholder="", debounce=True),
+        html.Br(),
+        html.Br(),
+        html.I("Enter Password:  "),
         dcc.Input(id="password", type="text", placeholder="", debounce=True),
         html.Div(id="login-output"),
         html.Br(),
         html.Br(),
         html.Button('Login', id='login-button', n_clicks=0),
-        html.A(
-            html.Button('Home'),
-            href='/',),
         html.Br(),
         html.Br(),
         html.A(
             html.Button('Create Account'),
-            href='/createAccount')
+            href='/createAccount'),
+        html.Br(),
+        html.A(
+            html.Button('Home'),
+            href='/',),
         ])
         
         
@@ -114,14 +123,16 @@ def createAccount_layout():
 
 
 
-
-
 #testExercise = {"Date": ["19/02/03", "19/02/03"],
      #"Intensity": ["Hard", "Hard"],
      #"Exercise": ["Soccer", "Soccer"],
      #"Length": ["1 Hour", "2 Hours"]}
 #^^Used as a makeshift datatable before figuring out how to do query
 
+#Driver Example
+#def testGetExerciseForRob():
+    #df = getExercisefromdatabase(5)
+    #print("Robs Exercise Dataframe:" + str(df))
 
 def getExercisefromdatabase(userID):
 
@@ -173,7 +184,7 @@ def createExerciseSummary_layout():
         html.Br(),
 
         html.A(
-        html.Button('Back'),
+        html.Button('Main Menu'),
         href='/',),
         
         ])
@@ -265,7 +276,7 @@ def createExercise_layout():
     
     html.Br(),
     html.A(
-        html.Button('Back'),
+        html.Button('View Summary'),
         href='/exerciseSummary',
     ),
 ])
@@ -331,8 +342,16 @@ def createExerciseSummaryGraph_layout():
         ),
         html.Br(),
         html.A(
-            html.Button('Back'),
+            html.Button('View Exercise Summary'),
             href='/exerciseSummary'),
+        html.Br(),
+        html.A(
+            html.Button('Create New Exercise'),
+            href='/createExercise'),
+        html.Br(),
+        html.A(
+            html.Button('Main Menu'),
+            href='/'),
     ])
 
 

@@ -1,13 +1,14 @@
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
-import re 
+import re # regular expressions
 import sqlite3
 import pandas as pd
+import constants
 from dash.dependencies import Input, Output, State
 from fitman import fitman
 from datetime import datetime as dt
-from flask import render_template, request, session, redirect, url_for
+from flask import session
 import constants
 from layouts import createHomepage_layout
 
@@ -38,6 +39,7 @@ def searchUserFromDatabase(findUser):
     return 
 
 #login callback
+#
 @fitman.callback(
     dash.dependencies.Output("login-output", "children"),
     [Input('login-button', 'n_clicks'),
@@ -63,10 +65,9 @@ def login(n_clicks, username, password):
             session[constants.SESSION_USERNAME_FIELD] = user[1]
             session[constants.SESSION_USERID_FIELD] = user[0]
 
-            return "Welcome back " + user[1] + "! Click Home to see the main menu."
+            return "Welcome back " + user[1] + "! Click Home to continue"
     else:
         return   
-
 #logout callback
 @fitman.callback(
     dash.dependencies.Output("logout-output", "children"),
@@ -80,6 +81,7 @@ def logout(n_clicks):
         return
     else:
         return
+
 
 
 #createUser callback
@@ -116,6 +118,7 @@ def addUserToDatabase(n_clicks, newUser, newPass):
     return
 
 
+
 #createExercise page callbacks
 @fitman.callback(
     dash.dependencies.Output('form-end', 'children'),
@@ -125,7 +128,6 @@ def addUserToDatabase(n_clicks, newUser, newPass):
      State('createExercise-length-slider', 'value'),
      State('createExercise-intensity-slider', 'value')
     ])
-
 #state refers to the state of the str and orders them   
 def addExerciseToDatabase(n_clicks, exerciseValue, dateStr, lengthValue, intensityValue):
 
@@ -158,11 +160,6 @@ def addExerciseToDatabase(n_clicks, exerciseValue, dateStr, lengthValue, intensi
         return 'You have submitted "{}" on the "{}" for "{}" minutes at "{}" intensity'.format(exerciseValue, dateStr, lengthValue, intensityValue)
     else:
         return
-#@fitman.callback(
-
-
-     
-
 
 #addExerciseToDatabase - gives the function within the createExercises page, starting data as a string, pulling it apart to be fed into .format which then
 #reforms it into a string again. This is the only way to make the SQL data work with my dash (that i could find)
