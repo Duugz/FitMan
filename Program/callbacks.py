@@ -193,10 +193,10 @@ def show_help(n1, n2, is_open):
     return is_open
     
 @fitman.callback(
-    Output("newUser-help", "is_open"),
-    [Input("newUser-open", "n_clicks"),
-    Input("newUser-close", "n_clicks")],
-    [State("newUser-help", "is_open")],
+     Output("new-help", "is_open"),
+    [Input("new-open", "n_clicks"),
+     Input("new-close", "n_clicks")],
+     [State("new-help", "is_open")],
 )
 def show_help(n1, n2, is_open):
     if n1 or n2:

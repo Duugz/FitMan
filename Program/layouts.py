@@ -77,10 +77,12 @@ def createHomepage_layout():
             dbc.ModalHeader("Help"),
             dbc.ModalBody('''
 
-                            If you already have an account, type in username and password (in that order) then hit submit. Once you see the display message ‘Login Complete’ click the home button
-
-                            If you don't already have an account then click create account. 
-
+Welcome to FitMan!
+This app is a great way to store data from your exercises, or to view exercises you have already entered! :)
+To begin, click ‘Create New Exercise’ to add an exercise to your table
+If you already have exercises, you can either view them in a table by clicking ‘View Exercise Summary’ or in a graph by clicking ‘View Exercise Graph’.
+If you want to Logout of Fitman, hit the logout button.
+Have Fun! :D
                           '''),
             dbc.ModalFooter(
                 dbc.Button("Close", id="main-menu-close", className="m1-auto")
@@ -121,7 +123,14 @@ def createHomepage_layout():
             dbc.Modal(
                 [
                     dbc.ModalHeader("Help"),
-                    dbc.ModalBody("This is the content of the modal"),
+                    dbc.ModalBody('''
+
+If you already have an account, type in username and password then hit submit.
+Once you see the display message ‘Login Complete’ click the home button
+
+If you don't already have an account then click create account.
+
+                    '''),
                     dbc.ModalFooter(
                     dbc.Button("Close", id="login-close", className="m1-auto")
                     ),
@@ -141,7 +150,7 @@ def createAccount_layout():
     return html.Div([
 
     html.H1("Create New Account"),
-    html.Div(id ='createAccount-menu'),
+    html.Div(id ='createAccount-'),
     html.I("Enter New Username and Password"),
     html.Br(),
     dcc.Input(id="newUser", type="text", placeholder="", debounce=True),
@@ -156,19 +165,27 @@ def createAccount_layout():
         href='/',),
     html.Br(),
     html.Br(),
-    dbc.Button("?", id="newAccount-open"),
+    dbc.Button("?", id="new-open"),
         dbc.Modal(
             [
                 dbc.ModalHeader("Help"),
-                dbc.ModalBody("This is the content of the modal"),
+                dbc.ModalBody('''
+
+Enter a new username and password into the respective boxes.
+If anything other than ‘account created’ appears below it means you have entered a username or password that already exists
+
+Hit back to return to the Login page
+
+                '''),
                 dbc.ModalFooter(
-                    dbc.Button("Close", id="newAccount-close", className="ml-auto")
+                dbc.Button("Close", id="new-close", className="ml-auto")
                 ),
             ],
-            id="newAccount-help",
+            id="new-help",
             size="lg",
         ),
-    ])
+])
+    
 
 
 
@@ -245,7 +262,15 @@ def createExerciseSummary_layout():
             dbc.Modal(
                 [
                     dbc.ModalHeader("Help"),
-                    dbc.ModalBody("This is the content of the modal"),
+                    dbc.ModalBody('''
+
+This is your Exercise Summary page.
+
+You can add Exercises from here, or you can view your graph by clicking the respective buttons for each.
+
+Click back to return to the main menu.
+
+                    '''),
                     dbc.ModalFooter(
                         dbc.Button("Close", id="summary-close", className="ml-auto")
                     ),
@@ -352,7 +377,17 @@ def createExercise_layout():
         dbc.Modal(
             [
                 dbc.ModalHeader("Help"),
-                dbc.ModalBody("This is the content of the modal"),
+                dbc.ModalBody('''
+
+Here is where all exercises are created :)
+
+You can use the two dropdowns to set the data and sport that you did on the given day. 
+Creating an exercise also involves using the two sliders to input the length and intensity of your workout.
+
+Once you have entered all the fields to your desired time, click ‘Submit’. You should get a message saying ‘You have Submitted’ followed by your fields.
+When this message appears, you can then hit ‘View Summary’ to return to the ‘Exercise Summary’ Page
+
+                '''),
                 dbc.ModalFooter(
                     dbc.Button("Close", id="createExercise-close", className="ml-auto")
                 ),
@@ -438,7 +473,18 @@ def createExerciseSummaryGraph_layout():
             dbc.Modal(
                 [
                     dbc.ModalHeader("Help"),
-                    dbc.ModalBody("This is the content of the modal"),
+                    dbc.ModalBody('''
+
+You can hover over each bar in the graph to display the date that it occurred on. 
+Also using the dash tools in the top right of the graph you can zoom in and out as well as other devices.
+
+Try it!
+
+Use the ‘Create New Exercise’ to add an exercise to your table from here
+You can view exercises in table form by clicking ‘View Exercise Summary’ 
+Return to Main Menu with the respective buttons.
+
+                    '''),
                     dbc.ModalFooter(
                         dbc.Button("Close", id="graph-close", className="ml-auto")
                     ),

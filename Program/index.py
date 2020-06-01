@@ -7,9 +7,10 @@ from layouts import createExerciseSummary_layout, createExercise_layout, createE
 import callbacks
 
 
-appName = "Fitman"
-appVersion = "1.4"
-appAuthor = "R.Duggan"
+#appName = "Fitman"
+#appVersion = "1.4"
+#appAuthor = "R.Duggan"
+#debugging data^^^
 
 fitman.layout = html.Div([
     dcc.Location(id='url', refresh=False),
