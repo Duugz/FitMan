@@ -1,17 +1,18 @@
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_table
-import sqlite3
-import pandas as pd
-import plotly.graph_objs as go
-import constants
-from flask import session 
+import dash_core_components as dcc #the core componets library, used multiple times with buttons drop downs etc
+import dash_html_components as html #every bit of text, field or graphing uses html. For example html.Div, html.Br etc
+import dash_bootstrap_components as dbc #used for help menus, allow for a popup that can be exited
+import dash_table #part of dash components, except it needs its own import due to it not being the core components library
+import sqlite3# built into python, creates a connection between files for pandas to then run a query or insert
+import pandas as pd #uses queries and inserts to use SQL code. SQLite uses SQL.
+import plotly.graph_objs as go #imports graphing tech that i need
+import constants #imports constants that are then added to a session
+from flask import session #sessions make it so you can create constants for each page. ie isUserLoggedIn
 from dash.dependencies import Input, Output
-from datetime import datetime as dt #just convinient to use a shorter name
+from datetime import datetime as dt #can order dates in certain orders such as YY/MM/DD = %Y%m%d
 from datetime import timedelta
-from fitman import fitman
+from fitman import fitman #main program
 
-def getLoggedInPageHeader():
+def getLoggedInPageHeader(): #displays a header above the page using the session Username or getLoggedInUsername 
 
     return html.Div([
         html.H1("FitMan"),
@@ -19,18 +20,19 @@ def getLoggedInPageHeader():
         html.Hr()
         ])
 
-
-def getLoggedInUsername():
+#grabs the Username from the session. It does this by using the constant which is created whenever a user logs in.
+def getLoggedInUsername(): 
     try: 
         return session[constants.SESSION_USERNAME_FIELD]
     except:
         return ""
 
-def isUserLoggedIn():
+
+def isUserLoggedIn(): #this function checks that a user is logged in. I also hadn't used flags at all before so i this function into one
 
     isLoggedIn = False
     
-    if getLoggedInUsername() == "":
+    if getLoggedInUsername() == "":#this makes it so that page headers are text not a random variable.
         isLoggedIn = False
     else:
         isLoggedIn = True
@@ -40,7 +42,7 @@ def isUserLoggedIn():
 
 def createHomepage_layout():
 
-    #testGetExerciseForRob()
+    #testGetExerciseForRob() part of the driver debug device (see below and in doc)
 
     if isUserLoggedIn(): 
     
@@ -67,7 +69,27 @@ def createHomepage_layout():
             html.Button('Logout', id='logout-button', n_clicks=0),
             href='/'),
         html.Div(id="logout-output"),
-        ])
+        html.Br(),
+        html.Br(),
+        dbc.Button("?", id="main-menu-open"),
+        dbc.Modal(
+            [
+            dbc.ModalHeader("Help"),
+            dbc.ModalBody('''
+
+                            If you already have an account, type in username and password (in that order) then hit submit. Once you see the display message ‘Login Complete’ click the home button
+
+                            If you don't already have an account then click create account. 
+
+                          '''),
+            dbc.ModalFooter(
+                dbc.Button("Close", id="main-menu-close", className="m1-auto")
+            ),
+        ],
+        id="main-menu-help",
+        size="lg",
+    ),
+])
     
     else:
         return html.Div([
@@ -93,6 +115,20 @@ def createHomepage_layout():
         html.A(
             html.Button('Home'),
             href='/',),
+        html.Br(),
+        html.Br(),
+        dbc.Button("?", id="login-open"),
+            dbc.Modal(
+                [
+                    dbc.ModalHeader("Help"),
+                    dbc.ModalBody("This is the content of the modal"),
+                    dbc.ModalFooter(
+                    dbc.Button("Close", id="login-close", className="m1-auto")
+                    ),
+                ],
+                id="login-help",
+                size="lg",
+            ),
         ])
         
         
@@ -118,6 +154,20 @@ def createAccount_layout():
     html.A(
         html.Button('Back'),
         href='/',),
+    html.Br(),
+    html.Br(),
+    dbc.Button("?", id="newAccount-open"),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("Help"),
+                dbc.ModalBody("This is the content of the modal"),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="newAccount-close", className="ml-auto")
+                ),
+            ],
+            id="newAccount-help",
+            size="lg",
+        ),
     ])
 
 
@@ -127,12 +177,15 @@ def createAccount_layout():
      #"Intensity": ["Hard", "Hard"],
      #"Exercise": ["Soccer", "Soccer"],
      #"Length": ["1 Hour", "2 Hours"]}
+
 #^^Used as a makeshift datatable before figuring out how to do query
 
 #Driver Example
 #def testGetExerciseForRob():
     #df = getExercisefromdatabase(5)
     #print("Robs Exercise Dataframe:" + str(df))
+
+
 
 def getExercisefromdatabase(userID):
 
@@ -147,7 +200,8 @@ def getExercisefromdatabase(userID):
     #dataframe = pd.read_sql_query(INSERT INTO Exercises (ExerciseID, ExerciseDate, ExerciseType, Intensity, LengthMins)
                                   #VALUES ()
     #print('test')
-    #return 
+    #return
+#early version of the queries that i use in actual program.
       
 
 
@@ -186,6 +240,19 @@ def createExerciseSummary_layout():
         html.A(
         html.Button('Main Menu'),
         href='/',),
+        html.Br(),
+        dbc.Button("?", id="summary-open"),
+            dbc.Modal(
+                [
+                    dbc.ModalHeader("Help"),
+                    dbc.ModalBody("This is the content of the modal"),
+                    dbc.ModalFooter(
+                        dbc.Button("Close", id="summary-close", className="ml-auto")
+                    ),
+                ],
+                id="summary-help",
+                size="lg",
+            ),
         
         ])
   
@@ -279,6 +346,19 @@ def createExercise_layout():
         html.Button('View Summary'),
         href='/exerciseSummary',
     ),
+    html.Br(),
+    html.Br(),
+    dbc.Button("?", id="createExercise-open"),
+        dbc.Modal(
+            [
+                dbc.ModalHeader("Help"),
+                dbc.ModalBody("This is the content of the modal"),
+                dbc.ModalFooter(
+                    dbc.Button("Close", id="createExercise-close", className="ml-auto")
+                ),
+            ],
+            id="createExercise-help",
+        ),
 ])
 
 
@@ -352,6 +432,19 @@ def createExerciseSummaryGraph_layout():
         html.A(
             html.Button('Main Menu'),
             href='/'),
+        html.Br(),
+        html.Br(),
+        dbc.Button("?", id="graph-open"),
+            dbc.Modal(
+                [
+                    dbc.ModalHeader("Help"),
+                    dbc.ModalBody("This is the content of the modal"),
+                    dbc.ModalFooter(
+                        dbc.Button("Close", id="graph-close", className="ml-auto")
+                    ),
+                ],
+                id="graph-help",
+            ),
     ])
 
 

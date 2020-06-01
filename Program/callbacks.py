@@ -1,6 +1,7 @@
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
+import dash_bootstrap_components
 import re # regular expressions
 import sqlite3
 import pandas as pd
@@ -165,3 +166,106 @@ def addExerciseToDatabase(n_clicks, exerciseValue, dateStr, lengthValue, intensi
 #reforms it into a string again. This is the only way to make the SQL data work with my dash (that i could find)
 #return 'You\'ve entered "{}", "{}", "{}", "{}"'.format(exerciseValue, dateValue, lengthValue, intensityValue) gives the message after submitting
 #%Y-%m-%d arranges date in years/months/days
+
+
+#help screens callbacks
+
+@fitman.callback(
+      Output("login-help", "is_open"),
+     [Input("login-open", "n_clicks"),
+      Input("login-close", "n_clicks")],
+      [State("login-help", "is_open")],
+)
+def show_help(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+@fitman.callback(
+     Output("main-menu-help", "is_open"),
+    [Input("main-menu-open", "n_clicks"),
+     Input("main-menu-close", "n_clicks")],
+     [State("main-menu-help", "is_open")],
+)
+def show_help(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+    
+@fitman.callback(
+    Output("newUser-help", "is_open"),
+    [Input("newUser-open", "n_clicks"),
+    Input("newUser-close", "n_clicks")],
+    [State("newUser-help", "is_open")],
+)
+def show_help(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+@fitman.callback(
+    Output("summary-help", "is_open"),
+    [Input("summary-open", "n_clicks"),
+     Input("summary-close", "n_clicks")],
+    [State("summary-help", "is_open")],
+)
+def show_help(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+    
+@fitman.callback(
+    Output("graph-help", "is_open"),
+    [Input("graph-open", "n_clicks"),
+     Input("graph-close", "n_clicks")],
+    [State("graph-help", "is_open")],
+)
+def show_help(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+    
+@fitman.callback(
+    Output("createExercise-help", "is_open"),
+    [Input("createExercise-open", "n_clicks"),
+     Input("createExercise-close", "n_clicks")],
+    [State("createExercise-help", "is_open")],
+)
+def show_help(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+#this form of callback doesn't work for what i want to do because the program cant progress having multiple inputs, outputs and states all at one time.
+
+##@fitman.callback(
+##     [Output("login-help", "is_open"),
+##     Output("main-menu-help", "is_open"),
+##     Output("newUser-help", "is_open"),
+##     Output("summary-help", "is_open"),
+##     Output("graph-help", "is_open"),
+##     Output("createExercise-help", "is_open")],
+##    [Input("login-open", "n_clicks"), Input("login-close", "n_clicks"),
+##    Input("main-menu-open", "n_clicks"), Input("main-menu-close", "n_clicks"),
+##    Input("newUser-open", "n_clicks"), Input("newUser-close", "n_clicks"),
+##    Input("summary-open", "n_clicks"), Input("summary-close", "n_clicks"),
+##    Input("graph-open", "n_clicks"), Input("graph-close", "n_clicks"),
+##    Input("createExercise-open", "n_clicks"), Input("createExercise-close", "n_clicks")
+##     ],
+##     [State("login-help", "is_open"),
+##     State("main-menu-help", "is_open"),
+##     State("newUser-help", "is_open"),
+##     State("summary-help", "is_open"),
+##     State("graph-help", "is_open"),
+##     State("createExercise-help", "is_open")],
+##)
+
+
+
+
+
+
+
+
+    
+    
