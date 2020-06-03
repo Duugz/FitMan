@@ -98,11 +98,15 @@ def createHomepage_layout():
             html.Button('See Exercise Graph'),
             href='/graph'),
         html.Br(),
-        html.A(
-            html.Button('Logout', id='logout-button', n_clicks=0), 
-            href='/'),
+
+        html.Button('Logout', id='logout-button', n_clicks=0),
+
+
         html.Div(id="logout-output"),
         html.Br(),
+        html.A(
+            html.Button('Home'),
+            href='/', ),
         html.Br(),
         dbc.Button("?", id="main-menu-open"),
         dbc.Modal(

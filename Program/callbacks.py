@@ -104,7 +104,7 @@ def logout(n_clicks):
         #print("Logout Called")
         session.pop(constants.SESSION_USERNAME_FIELD)#session.pop removes the session constants 
         session.pop(constants.SESSION_USERID_FIELD)
-        return
+        return "You are logged out, Click home to exit"
     else:
         return
 
