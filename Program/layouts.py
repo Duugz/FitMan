@@ -17,7 +17,7 @@ from datetime import timedelta
 from fitman import fitman #almost every page has to call this because it connects the page to the server '__main__'
 #----------------------------------------------------------------------------------------------------------
 
-#there is alot of similar lines of code in my program that I wont bother explaining twice.
+#there is alot of similar lines of code in my  that I wont bother explaining twice.
 
 #dash html components:
 #html.Div - creates a divider on a page that content can then stored in.
@@ -86,17 +86,17 @@ def createHomepage_layout():
         
         html.Div(),
         html.A(
+            html.Button('Create New Exercise'),
+            href='/createExercise'),
+        html.Br(),
+        html.Br(),
+        html.A(
             html.Button('See Exercise Summary'),
             href='/exerciseSummary'),
         html.Br(),
         html.A(
             html.Button('See Exercise Graph'),
             href='/graph'),
-        html.Br(),
-        html.A(
-            html.Button('Create New Exercise'),
-            href='/createExercise'),
-        html.Br(),
         html.Br(),
         html.A(
             html.Button('Logout', id='logout-button', n_clicks=0), 
@@ -323,9 +323,9 @@ def createExercise_layout():
     dcc.DatePickerSingle(#date field
         id='createExercise-date-picker',
         min_date_allowed=dt(2020, 1, 1),
-        max_date_allowed=dt(2022, 12, 30),#enter any date from 2020 to 2022
-        initial_visible_month=dt(2020, 8, 5),
-        date=str(dt(2020, 8, 25)), #the default date is the 25th/8th
+        max_date_allowed=dt(2028, 12, 30),
+        #initial_visible_month=dt(2020, 8, 5),
+        date=str(dt.today()),
         ),
 
     html.Br(),
@@ -428,12 +428,16 @@ def createExerciseSummaryGraph_layout():
     #create a dictionary with an entry for every date that =0
     graphDict = dict()
 
-    startDate = dt.strptime("2020-01-01", "%Y-%m-%d")  #hardcoded limits only allows for 2020 to 2022
-    endDate = dt.strptime("2022-12-30", "%Y-%m-%d")  
+    startDate  = dt.today() - timedelta(days=28)
+    endDate = dt.today()
+
+    #once again dont know why this works. It takes out the timne from the date and leaves it as 00:00:00
+    startDate = dt.strptime(startDate.strftime('%Y-%m-%d'), '%Y-%m-%d')
+    endDate = dt.strptime(endDate.strftime('%Y-%m-%d'), '%Y-%m-%d')
 
     dayCount = (endDate - startDate).days + 1
     for singleDate in (startDate + timedelta(n) for n in range(dayCount)): #
-        graphDict[singleDate]=0   #timedelta can is used to express the between two dates ie. Start and End 
+        graphDict[singleDate]=0   #timedelta is used to express between two dates ie. Start and End
     
     
     #for every date in the database, add the length to the value in the dictionary
@@ -443,7 +447,9 @@ def createExerciseSummaryGraph_layout():
         lengthMins = int(exer.get("LengthMins"))
 
         dayLengthMins = graphDict.get(eDate)
-        graphDict[eDate]= dayLengthMins + lengthMins
+
+        if dayLengthMins is not None:
+            graphDict[eDate]= dayLengthMins + lengthMins
 
 
     #builds an array of x and y values for the graph, adding exercises on the same day together as well

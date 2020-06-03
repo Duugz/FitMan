@@ -14,13 +14,22 @@ from fitman import fitman
 from datetime import datetime as dt
 from flask import session
 import constants
-from layouts import createHomepage_layout #this needs this for the purpose of
-
-#------------------------------------------------------
-#common callback code
-#@fitman.callback
 
 
+#--------------------------------------------------------
+#common callback code (that i dont want to explain twice
+#@fitman.callback - the decorator for a layout or layout function
+#Input - 
+#Output -
+#State - 
+#Within one of these three conditions, you have the id="fieldID" and then an argument
+#some of these are
+#value - A value can be any number or letter
+#children - the same as html.H1 (what comes first)
+#date - describes the value as a date (YY/MM/DD)
+#n_clicks - the amount of times something is pressed
+#is_open - For Modals. A condition that says that the modal is still open
+#---------------------------------------------------------
 
 #this function makes sure that a users details are correct and then is called into the function login()
 def searchUserFromDatabase(findUser):
@@ -82,16 +91,18 @@ def login(n_clicks, username, password):
 
             return "Welcome back " + user[1] + "! Click Home to continue"
     else:
-        return   
+        return
+    
 #logout callback
 @fitman.callback(
     dash.dependencies.Output("logout-output", "children"),
     [Input('logout-button', 'n_clicks')
      ])
+
 def logout(n_clicks):
     if n_clicks > 0:
-        print("Logout Called")
-        session.pop(constants.SESSION_USERNAME_FIELD)
+        #print("Logout Called")
+        session.pop(constants.SESSION_USERNAME_FIELD)#session.pop removes the session constants 
         session.pop(constants.SESSION_USERID_FIELD)
         return
     else:
@@ -109,23 +120,24 @@ def logout(n_clicks):
 def addUserToDatabase(n_clicks, newUser, newPass):
 
     if n_clicks > 0:
-
-        if searchUserFromDatabase(newUser) is not None:
+        #This function essentially makes sure that the username is avalible 
+        if searchUserFromDatabase(newUser) is not None:#checks that the entered user 'is not none'
 
             return "Sorry, that username already exists"
 
         else:
-        
+            #this part took a very long time
+            #The connection is still the except that now, for an insert statement we need to create a cursor
             connectionAdd = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
             cursor = connectionAdd.cursor()
-
+            #cursors essentially looks through a row of code in SQL table 
             insertSQL = 'INSERT INTO User (Username, Password) VALUES ({},{})'
             insertSQL = insertSQL.format("'" + newUser + "'","'"+ newPass+"'")
-            print(insertSQL)
-            
+            #print(insertSQL)
+            #this can then be executed with an INSERT INTO statement to insert data into said table
             countAdd = cursor.execute(insertSQL)
             connectionAdd.commit()
-
+            #after the commit it needs to be closed as well as the connection 
             cursor.close()
             connectionAdd.close()
             return "Your account has been created! Click Back to login" 
@@ -161,7 +173,7 @@ def addExerciseToDatabase(n_clicks, exerciseValue, dateStr, lengthValue, intensi
         #except:
 
             #return 'System Error, no userID found in session'
-        
+        #same idea as above, make connection, open cursor, search for the rows, SQL INSER INTO statement and then close the cursor and connection
         insertSQL = 'INSERT INTO Exercises (UserID, ExerciseType, ExerciseDate, LengthMins, Intensity) VALUES ('+ str(userID) +',"{}","{}",{},{})'
         insertSQL = insertSQL.format(exerciseValue, date.strftime('%Y-%m-%d'), lengthValue, intensityValue)
         countAdd = cursor.execute(insertSQL)
@@ -190,8 +202,8 @@ def addExerciseToDatabase(n_clicks, exerciseValue, dateStr, lengthValue, intensi
       Input("login-close", "n_clicks")],
       [State("login-help", "is_open")],
 )
-def show_help(n1, n2, is_open):
-    if n1 or n2:
+def show_help(Lopen, Lclose, is_open):#this funtion controls the Modal with a simple if statement that says if the modal state isnt open then close (same for all below)
+    if Lopen or Lclose:
         return not is_open
     return is_open
 
@@ -250,7 +262,7 @@ def show_help(n1, n2, is_open):
         return not is_open
     return is_open
 
-#this form of callback doesn't work for what i want to do because the program cant progress having multiple inputs, outputs and states all at one time.
+#this form of bulking inputs, outputs and states in a callback doesn't work for what i want to do because the program cant progress having too many states for too many pages
 
 ##@fitman.callback(
 ##     [Output("login-help", "is_open"),
