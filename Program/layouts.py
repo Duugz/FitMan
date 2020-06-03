@@ -376,7 +376,7 @@ def createExercise_layout():
     value=5
     ),
     html.Br(),
-    html.Button(id='submit-btn', n_clicks=0, children='Submit'),
+    html.Button(id='submit-btn', n_clicks=0, children='Submit', className="fitman.button"),
     
     html.Div(id='form-end'),
     

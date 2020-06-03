@@ -48,8 +48,12 @@ def fitmanPaths(pathname):
     else:
         return 'Unknown URL' #any other url it will return this
 
-fitman.css.append_css({ 'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'
-})
+fitman.css.append_css({ 'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'})
+
+
+fitman.css.append_css({ 'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'})
+
+
 #this will import the css that you have import wether it be a url or a text file
 if __name__ == '__main__':
     fitman.run_server(debug=True)
