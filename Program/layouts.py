@@ -1,3 +1,7 @@
+#This the main layouts page and is where all the content/field functions are extablished. Layouts in dash work
+#with callback decorators to show outputs from inputs. Basically the layout is the content that the user sees
+#when using the app without any inputs. :)
+#---------------------------------------------------------------------------------------
 import dash_core_components as dcc #the core componets library, used multiple times with buttons drop downs etc
 import dash_html_components as html #every bit of text, field or graphing uses html. For example html.Div, html.Br etc
 import dash_bootstrap_components as dbc #used for help menus, allow for a popup that can be exited
@@ -10,9 +14,38 @@ from flask import session #sessions make it so you can create constants for each
 from dash.dependencies import Input, Output
 from datetime import datetime as dt #can order dates in certain orders such as YY/MM/DD = %Y%m%d
 from datetime import timedelta
-from fitman import fitman #main program
+from fitman import fitman #almost every page has to call this because it connects the page to the server '__main__'
+#----------------------------------------------------------------------------------------------------------
 
-def getLoggedInPageHeader(): #displays a header above the page using the session Username or getLoggedInUsername 
+#there is alot of similar lines of code in my program that I wont bother explaining twice.
+
+#dash html components:
+#html.Div - creates a divider on a page that content can then stored in.
+#html.Br() - creates a break or 'gap' in the page. Mostly used to make the site look nicer.
+#html.H1-H3 - all different types of page headers that you can use to format the site.
+#html.I - another type of header, used for fields or smaller button and boxes
+#html.A - creates an anchor, usually used for buttons that change the directory
+#html.Button - creates a button that can be clicked to then callback to submit or move pages
+
+#within the core componets we have:
+#dcc.Input, Dropdown, DatePicker etc - lets you input a field that can then be calledback
+
+#dash bootstrap components
+#dbc.Modal: A popup window that i used mostly for help screens.
+#Header - The top part of the modal describing the modal
+#Body - the contents of the modal
+#Footer - the bottom of the modal usually an exit button
+#size = lg - sets the modal size to large 
+
+#ids - ids are used in the decorator callbacks to connect the inputs and button presses to an output
+#n_clicks - n_clicks is used for buttons to detect if its been pressed (see callbacks page)
+#href - used in an anchor to refer a button or input to another url (used for changing pages easily)
+#to_dict - changes a tuple or a dataframe to a dictionary which dash components are able to read such as a graph or a table. The library can be ordered in different ways such as 'record' or 'series'
+
+#--------------------------------------------------------------------------------------------------------------
+
+#defining the function that displays a header above the page using the session Username or getLoggedInUsername
+def getLoggedInPageHeader():  
 
     return html.Div([
         html.H1("FitMan"),
@@ -27,19 +60,19 @@ def getLoggedInUsername():
     except:
         return ""
 
-
-def isUserLoggedIn(): #this function checks that a user is logged in. I also hadn't used flags at all before so i this function into one
+#this function checks that a user is logged in. I also hadn't used flags at all before so i this function into one
+def isUserLoggedIn(): 
 
     isLoggedIn = False
-    
-    if getLoggedInUsername() == "":#this makes it so that page headers are text not a random variable.
+    #this if statemnt makes it so that page headers are text not a random tuple.
+    if getLoggedInUsername() == "":
         isLoggedIn = False
     else:
         isLoggedIn = True
 
     return isLoggedIn
 
-
+#function for creating the homepage
 def createHomepage_layout():
 
     #testGetExerciseForRob() part of the driver debug device (see below and in doc)
@@ -47,7 +80,7 @@ def createHomepage_layout():
     if isUserLoggedIn(): 
     
         return html.Div([
-        getLoggedInPageHeader(),
+        getLoggedInPageHeader(), #this is on every page, it calls the header to the top of the page
 
         html.H1("Welcome Back!"),
         
@@ -66,7 +99,7 @@ def createHomepage_layout():
         html.Br(),
         html.Br(),
         html.A(
-            html.Button('Logout', id='logout-button', n_clicks=0),
+            html.Button('Logout', id='logout-button', n_clicks=0), 
             href='/'),
         html.Div(id="logout-output"),
         html.Br(),
@@ -88,8 +121,8 @@ Have Fun! :D
                 dbc.Button("Close", id="main-menu-close", className="m1-auto")
             ),
         ],
-        id="main-menu-help",
-        size="lg",
+        id="main-menu-help", 
+        size="lg", 
     ),
 ])
     
@@ -99,11 +132,15 @@ Have Fun! :D
         html.Div(),
         html.Br(),
         html.I("Enter Username: "),
+        #type: is basically telling the program to identify that box as being normal text or as password 
         dcc.Input(id="username", type="text", placeholder="", debounce=True),
+        #see bottom of callbacks for explaination of the debounce tool
         html.Br(),
         html.Br(),
         html.I("Enter Password:  "),
-        dcc.Input(id="password", type="text", placeholder="", debounce=True),
+        dcc.Input(id="password", type="password", placeholder="", debounce=True),
+        #anything typed in this box will be dotted out because its type = password
+        #placeholder means that the box will start with nothing in it 
         html.Div(id="login-output"),
         html.Br(),
         html.Br(),
@@ -144,7 +181,7 @@ If you don't already have an account then click create account.
         
         
         
-        
+#create account page layout        
 def createAccount_layout():
     
     return html.Div([
@@ -153,6 +190,7 @@ def createAccount_layout():
     html.Div(id ='createAccount-'),
     html.I("Enter New Username and Password"),
     html.Br(),
+    #see above in createHomepage_layout for explaination on type, debounce and placeholders
     dcc.Input(id="newUser", type="text", placeholder="", debounce=True),
     dcc.Input(id="newPass", type="text", placeholder="", debounce=True),
     html.Div(id="createUser-output"),
@@ -188,43 +226,19 @@ Hit back to return to the Login page
     
 
 
+def getExerciseFromDatabase(userID):
 
-
-#testExercise = {"Date": ["19/02/03", "19/02/03"],
-     #"Intensity": ["Hard", "Hard"],
-     #"Exercise": ["Soccer", "Soccer"],
-     #"Length": ["1 Hour", "2 Hours"]}
-
-#^^Used as a makeshift datatable before figuring out how to do query
-
-#Driver Example
-#def testGetExerciseForRob():
-    #df = getExercisefromdatabase(5)
-    #print("Robs Exercise Dataframe:" + str(df))
-
-
-
-def getExercisefromdatabase(userID):
-
-    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
+    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")#creates a connection from the database file to python
     df = pd.read_sql_query("SELECT ExerciseDate, ExerciseType, Intensity, LengthMins FROM Exercises WHERE UserID = " + str(userID) + " ORDER by ExerciseDate DESC", conn)
-    
+#the query collects the field values from the database using SQL code plus the userID that has been stored in the session
+#this makes it so that we arnt gathering every users field data
     return df
+#df stands for dataframe, that passes back from the function
 
-#def addExerciseToDatabase():
-
-    #connector = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
-    #dataframe = pd.read_sql_query(INSERT INTO Exercises (ExerciseID, ExerciseDate, ExerciseType, Intensity, LengthMins)
-                                  #VALUES ()
-    #print('test')
-    #return
-#early version of the queries that i use in actual program.
       
-
-
 def createExerciseSummary_layout():
 
-    df = getExercisefromdatabase(session[constants.SESSION_USERID_FIELD])#df stands for dataframe, that passes back from the function
+    df = getExerciseFromDatabase(session[constants.SESSION_USERID_FIELD])#the constant is called to use with the function
 
     return html.Div([
         getLoggedInPageHeader(),
@@ -232,10 +246,10 @@ def createExerciseSummary_layout():
         html.H1("Exercise Summary"),
         html.Br(),
         html.I("Your Exercises"),
-        dash_table.DataTable(
+        dash_table.DataTable(#an import from dash data_table, basically another part of the core components except it can call from a database 
             id='table',
-            columns=[{"name": i, "id": i} for i in df.columns],
-            data=df.to_dict('records'),
+            columns=[{"name": i, "id": i} for i in df.columns],#orders the collected data in a the order of catogories then the data
+            data=df.to_dict('records'), #see above for explaination of to_dict. 
         ),
         html.Div(id='exerciseSummary-display-value'),
         html.Br(),
@@ -284,15 +298,15 @@ Click back to return to the main menu.
 def createExercise_layout():
 
     return html.Div([
-    getLoggedInPageHeader(),
+    getLoggedInPageHeader(), 
     html.Br(),
     html.H1("Create Exercise"),
     html.Br(),
     html.I("Select Exercise"),
-    dcc.Dropdown(
-        id='createExercise-exercise',
+    dcc.Dropdown(#dropdown field
+        id='createExercise-exercise', 
         options=[
-            {'label': 'Swim', 'value': 'Swim'},
+            {'label': 'Swim', 'value': 'Swim'},#hardcoded exercises
             {'label': 'Run', 'value': 'Run'},
             {'label': 'Soccer', 'value': 'Soccer'},
             {'label': 'Boxing', 'value': 'Boxing'},
@@ -300,26 +314,26 @@ def createExercise_layout():
             {'label': 'Basketball', 'value': 'Basketball'},
             {'label': 'Paddle', 'value': 'Paddle'},
         ],
-        value='Swim'
+        value='Swim'#default value
     ),
     
     html.Br(),
     html.I("Select the Date"),
     html.Br(),
-    dcc.DatePickerSingle(
+    dcc.DatePickerSingle(#date field
         id='createExercise-date-picker',
-        min_date_allowed=dt(2018, 5, 23),
-        max_date_allowed=dt(2024, 9, 19),
+        min_date_allowed=dt(2020, 1, 1),
+        max_date_allowed=dt(2022, 12, 30),#enter any date from 2020 to 2022
         initial_visible_month=dt(2020, 8, 5),
-        date=str(dt(2020, 8, 25)),
+        date=str(dt(2020, 8, 25)), #the default date is the 25th/8th
         ),
 
     html.Br(),
     html.I("How long?"),
-    dcc.Slider(
+    dcc.Slider(#length field
         id='createExercise-length-slider',
-        min=0,
-        max=240,
+        min=0,#a minimum inout
+        max=240,#max input
         step=None,
         marks={
         5: '5 M',
@@ -336,12 +350,12 @@ def createExercise_layout():
         210: '3.5 Hours',
         240: '4 Hours',
         },
-    value=60
+    value=60# default value
     ),
     
     html.Br(),
     html.I("What intensity?"),
-    dcc.Slider(
+    dcc.Slider(#intensity field
         id='createExercise-intensity-slider',
         min=0,
         max=10,
@@ -380,6 +394,7 @@ def createExercise_layout():
                 dbc.ModalBody('''
 
 Here is where all exercises are created :)
+You can enter an exercise from the beginning of 2020 to the end of 2020!
 
 You can use the two dropdowns to set the data and sport that you did on the given day. 
 Creating an exercise also involves using the two sliders to input the length and intensity of your workout.
@@ -400,7 +415,7 @@ When this message appears, you can then hit ‘View Summary’ to return to the 
 
 def getDatesandLengthsfromdatabase(userID):
 
-    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db") 
+    conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")#see function getExerciseFromDatabase for explaination of query and connections
     df = pd.read_sql_query("SELECT ExerciseDate, LengthMins FROM Exercises WHERE UserID = " + str(userID) + " ORDER by ExerciseDate DESC", conn)      
     return df
     
@@ -413,12 +428,12 @@ def createExerciseSummaryGraph_layout():
     #create a dictionary with an entry for every date that =0
     graphDict = dict()
 
-    startDate = dt.strptime("2020-08-01", "%Y-%m-%d")  
-    endDate = dt.strptime("2020-11-01", "%Y-%m-%d")  
+    startDate = dt.strptime("2020-01-01", "%Y-%m-%d")  #hardcoded limits only allows for 2020 to 2022
+    endDate = dt.strptime("2022-12-30", "%Y-%m-%d")  
 
     dayCount = (endDate - startDate).days + 1
-    for singleDate in (startDate + timedelta(n) for n in range(dayCount)):
-        graphDict[singleDate]=0    
+    for singleDate in (startDate + timedelta(n) for n in range(dayCount)): #
+        graphDict[singleDate]=0   #timedelta can is used to express the between two dates ie. Start and End 
     
     
     #for every date in the database, add the length to the value in the dictionary
@@ -431,7 +446,7 @@ def createExerciseSummaryGraph_layout():
         graphDict[eDate]= dayLengthMins + lengthMins
 
 
-    #build an aray of x and v values for the graph
+    #builds an array of x and y values for the graph, adding exercises on the same day together as well
     eDateArr = []
     eLengthArr = []
 
@@ -440,9 +455,14 @@ def createExerciseSummaryGraph_layout():
         dayLengthMins = graphDict[singleDate]
         eDateArr = eDateArr + [singleDate]
         eLengthArr = eLengthArr + [dayLengthMins]
+        
 
+
+
+    #defining figure
     fig=go.Figure(
         data=[go.Bar(
+        #go.figure is an import from plotly graph objects that basically can order data in a library
                       x=eDateArr,
                       y=eLengthArr)
                ])
@@ -478,7 +498,8 @@ def createExerciseSummaryGraph_layout():
 You can hover over each bar in the graph to display the date that it occurred on. 
 Also using the dash tools in the top right of the graph you can zoom in and out as well as other devices.
 
-Try it!
+If your exercises are to hard to view, FitMan has a built in zoom feature which is located first on the left
+up the top.
 
 Use the ‘Create New Exercise’ to add an exercise to your table from here
 You can view exercises in table form by clicking ‘View Exercise Summary’ 
@@ -495,7 +516,32 @@ Return to Main Menu with the respective buttons.
 
 
 
+#--------------------------------------
+#old pieces of code
 
+#early version of the queries that i use in actual program.
+#def addExerciseToDatabase():
+
+    #connector = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
+    #dataframe = pd.read_sql_query(INSERT INTO Exercises (ExerciseID, ExerciseDate, ExerciseType, Intensity, LengthMins)
+                                  #VALUES ()
+    #print('test')
+    #return
+
+
+#this is hardcoded data_table data
+#testExercise = {"Date": ["19/02/03", "19/02/03"],
+     #"Intensity": ["Hard", "Hard"],
+     #"Exercise": ["Soccer", "Soccer"],
+     #"Length": ["1 Hour", "2 Hours"]}
+
+
+
+
+#Driver Example
+#def testGetExerciseForRob():
+    #df = getExercisefromdatabase(5)
+    #print("Robs Exercise Dataframe:" + str(df))
 
 
 

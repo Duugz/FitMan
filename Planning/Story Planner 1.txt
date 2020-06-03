@@ -1,14 +1,4 @@
-Tech to figure out:
-1. Basic Html buttons, inputs etc
-2. Multipage dash apps
-3. SQL Database
-4. Bar Chart/Graph
-5. Some way of creating an account and logging in 
-
-
-
-
-Basic Outline:---------------------------------------
+Basic Outline Done around 15/4:---------------------------------------
 
 Software Pages: 
 
@@ -29,8 +19,16 @@ Graphing Screen
 Click to see date and activity on dot 
 
 Back 
+----------------------------------------This was later changed^^^^---------------------------------
 
- 
+
+Tech to figure out:
+1. Basic Html buttons, inputs etc
+2. Multipage dash apps
+3. SQL Database
+4. Bar Chart/Graph
+5. Some way of creating an account and logging in (authentication)
+6. Help Screens
 
 Stories--------------------------------------------------------------------------------------------
 

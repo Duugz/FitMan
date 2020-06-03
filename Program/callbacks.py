@@ -1,3 +1,6 @@
+#This page contains all decorator callbacks for the program
+#All unexplaied imports/code have been explained already on layouts.py
+#-----------------------------
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -11,36 +14,46 @@ from fitman import fitman
 from datetime import datetime as dt
 from flask import session
 import constants
-from layouts import createHomepage_layout
+from layouts import createHomepage_layout #this needs this for the purpose of
+
+#------------------------------------------------------
+#common callback code
+#@fitman.callback
 
 
 
-def searchUserFromDatabase(findUser):   
+#this function makes sure that a users details are correct and then is called into the function login()
+def searchUserFromDatabase(findUser):
+    #as explained in layouts, the connection is established and a query is made with the UserID in mind
     conn = sqlite3.connect("C:\\Users\\Duugz\\FitMan\\fitman.db")
     selectsql = "SELECT UserID, Password, Username FROM User WHERE Username = '" + findUser + "'"
-    print(selectsql)
+    
+    #print(selectsql) debugging print()
     dataframe = pd.read_sql_query(selectsql, conn)
-
+    
+    #see layouts for definition of to_dict
     valueList = dataframe.to_dict('records')
     #valueDict = valueList[1]
     #valueList = list(dataframe)
-    print(valueList)
+    #I didnt know which one would work a library or a list so here is some random list() code
+    #print(valueList)
+
+    
     for user in valueList:
     #if len(valueList) > 0:
-        
+        #selects whichever corrosponding value for each variable
         password = user.get("Password")
         username = user.get("Username")
         userID = user.get("UserID")
 
         user = (userID, username, password)
-        print(user)
+        #print(user)
         
         return user
     
     return 
 
 #login callback
-#
 @fitman.callback(
     dash.dependencies.Output("login-output", "children"),
     [Input('login-button', 'n_clicks'),
@@ -49,9 +62,10 @@ def searchUserFromDatabase(findUser):
      ])
 def login(n_clicks, username, password):  
     
-    print("login called " + str(n_clicks))
+    #print("login called " + str(n_clicks))
     if n_clicks > 0:
-        print("login and n_clicks " + username)
+        #print("login and n_clicks " + username)
+        #more debugging statements I used
         user = searchUserFromDatabase(username)
         
         #print(user)
@@ -62,7 +76,7 @@ def login(n_clicks, username, password):
         elif user[2] != password:
             return "Password not found"
         else:      
-
+            #keeps these two variables in the session to display on the page or to be used later (see below)
             session[constants.SESSION_USERNAME_FIELD] = user[1]
             session[constants.SESSION_USERID_FIELD] = user[0]
 
